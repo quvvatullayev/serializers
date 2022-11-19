@@ -31,3 +31,9 @@ def getStudent(request: Request, id):
         return Response(serializer.data)
     except Task.DoesNotExist:
         return Response({'result': 'task not found'})
+
+@api_view(['GET'])
+def deletTask(request:Request, id):
+    task = Task.objects.get(id = id)
+    task.delete()
+    return Response({'results':'task removed successfully'})
