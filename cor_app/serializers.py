@@ -11,4 +11,5 @@ class TaskSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     def create(self, validated_data):
+
         return Task.objects.create(**validated_data) 

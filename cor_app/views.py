@@ -12,13 +12,10 @@ from django.contrib.auth.models import User
 @api_view(['POST'])
 def addTask(request:Request):
     data = request.data
-    d = User.objects.filter(username = request.user)
-    u = User.objects.get(username=request.user)
-    Task.objects.create(user = u, task = data['task'], description = data['description'])
     serializer = TaskSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer)
+        return Response(serializer.data)
     else:
         return Response(serializer.errors)
 
@@ -37,3 +34,20 @@ def deletTask(request:Request, id):
     task = Task.objects.get(id = id)
     task.delete()
     return Response({'results':'task removed successfully'})
+
+@api_view(['POST'])
+def updateTask(request:Request, id):
+    t_data = Task.objects.get(id = id)
+    r_data = request.data
+    data = {
+        'task':r_data.get('task'),
+        'description':r_data.get('description'),
+        'status':r_data.get('status')
+    }
+
+    serializer = TaskSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors)
