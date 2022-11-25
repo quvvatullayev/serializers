@@ -25,3 +25,9 @@ def update_task(request:Request, id) -> Response:
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
+
+@api_view(['GET'])
+def remov_task(request:Request, id) -> Response:
+    task = Task.objects.get(id = id)
+    task.delete()
+    return Response({"delete":"OK"})
