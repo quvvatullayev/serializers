@@ -1,15 +1,13 @@
-from .models import Task
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from .models import User, Task
 
-class TaskSerializer(serializers.Serializer):
-    task = serializers.CharField(max_length=50)
-    description = serializers.CharField(max_length=50)
-    status = serializers.BooleanField(default=False)
-    created_at = serializers.DateTimeField(read_only=True)
-    updated_at = serializers.DateTimeField(read_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
-    def create(self, validated_data):
-
-        return Task.objects.create(**validated_data) 
+class TaskSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    class Meta:
+        model = Task
+        fields = ['name', 'description', 'user']
