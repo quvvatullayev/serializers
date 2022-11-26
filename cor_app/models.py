@@ -18,3 +18,12 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    def todo_json(self):
+        json = {
+            'name':self.name,
+            'description':self.description,
+            'status':self.status,
+            'createdAt':self.createdAt,
+            'updateAt':self.updateAt
+        }

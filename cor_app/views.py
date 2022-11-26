@@ -31,3 +31,11 @@ def remov_task(request:Request, id) -> Response:
     task = Task.objects.get(id = id)
     task.delete()
     return Response({"delete":"OK"})
+
+@api_view(['GET'])
+def get_task(request:Request, id) -> Response:
+    task = Task.objects.get(id = id)
+    serializer = TaskSerializer(task)
+    if task:
+        return Response(serializer.data)
+    return Response(serializer.errors)
