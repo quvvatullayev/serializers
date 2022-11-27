@@ -31,19 +31,19 @@ class Get_all(APIView):
         return Response(serializer.errors)
 
 class Remov_task(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request:Request, id) -> Response:
         task = Task.objects.get(id = id)
         task.delete()
         return Response({"delete":"OK"})
-    
 
-@api_view(['POST'])
-def update_task(request:Request, id) -> Response:
-    data = request.data
-    task = Task.objects.get(id = id)
-    serializer = TaskSerializer(task, data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
-
+class Update_task(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request:Request, id) -> Response:
+        data = request.data
+        task = Task.objects.get(id = id)
+        serializer = TaskSerializer(task, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
